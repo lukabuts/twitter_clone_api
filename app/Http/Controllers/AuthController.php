@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -14,9 +15,11 @@ class AuthController extends Controller
     {
         $validated = $request->validated();
 
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'username' => $validated['username'],
             'password' => Hash::make($validated['password']),
         ]);
 
@@ -33,23 +36,20 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $validated = $request->validated();
+        $credentials = $this->getCredentials($request);
     
-        $user = User::where('email', $validated['email'])->first();
-    
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
+        if (!Auth::attempt($credentials)) {
             return response()->json([
                 'message' => 'Invalid credentials'
             ], 401);
         }
     
-        // Create token
-        $token = $user->createToken('api_token')->plainTextToken;
+        $user = $request->user();
+        $token = $user->createToken('auth_token')->plainTextToken;
     
         return response()->json([
-            'message' => 'Login successful',
-            'token' => $token,
             'user' => $user,
+            'token' => $token
         ]);
     }
 
@@ -63,5 +63,18 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Logged out successfully',
         ]);
+    }
+
+    protected function getCredentials($request)
+    {
+        $login = $request->input('login');
+    
+        // Determine if login is email or username
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+    
+        return [
+            $field => $login,
+            'password' => $request->input('password')
+        ];
     }
 }

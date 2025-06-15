@@ -12,9 +12,9 @@ class Comment extends Model
         'user_id',
     ];
 
-    public function post()
+    public function tweet()
     {
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(Tweet::class);
     }
 
     public function user()
