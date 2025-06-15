@@ -2,14 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Tweet extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'title',
         'content',
         'user_id',
+        'status',
+        'slug',
+        'image',
     ];
 
     public function user()

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class TweetRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,10 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'login' => 'required|string',
-            'password' => 'required|string',
+            'title' => 'string|max:255|required|min:5',
+            'status' => 'in:draft,published',
+            'content' => 'string|max:1000|required|min:5',
+            'image' => 'nullable|image|max:2048',
         ];
-
     }
 }
