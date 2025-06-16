@@ -9,12 +9,15 @@ class Tweet extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title',
         'content',
         'user_id',
         'status',
         'slug',
-        'image',
+        'images',
+    ];
+
+    protected $casts = [
+        'images' => 'array',
     ];
 
     public function user()
