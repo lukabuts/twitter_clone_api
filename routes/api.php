@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TweetController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -14,10 +15,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::controller(TweetController::class)->prefix('tweets')->group(function () {
         Route::get('/', 'index')->name('tweets.index');
         Route::post('/', 'store')->name('tweets.store');
-        Route::get('/{tweet}', 'show')->name('tweets.show');
+        Route::get('/{slug}', 'show')->name('tweets.show');
+
     });
 });
-
 
 Route::group(['middleware' => ['guest']], function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register');

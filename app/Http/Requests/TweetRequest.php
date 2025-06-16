@@ -22,10 +22,10 @@ class TweetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|max:255|required|min:5',
-            'status' => 'in:draft,published',
-            'content' => 'string|max:1000|required|min:5',
-            'image' => 'nullable|image|max:2048',
+            'content' => 'nullable|string|max:280|required_without:images',
+            'images' => 'nullable|array|max:4|required_without:content',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'nullable|in:draft,published'
         ];
     }
 }

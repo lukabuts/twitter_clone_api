@@ -17,12 +17,10 @@ class TweetFactory extends Factory
      */
     public function definition(): array
     {
-        $title = $this->faker->sentence(rand(3, 6));
-        $slug = Str::slug($title. '-' . time());
+        $slug = Str::random(32);
 
         return [
             'user_id' => 1,
-            'title' => $title,
             'content' => $this->faker->paragraphs(3, true),
             'slug' => $slug,
             'status' => $this->faker->randomElement(['draft', 'published']),
